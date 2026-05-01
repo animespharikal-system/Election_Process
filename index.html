@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VotePath | Your Voting Companion</title>
+    <meta name="description" content="Personalized election guide, voting checklist, and companion.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Accessibility Bar -->
+    <div class="a11y-bar">
+        <div class="container a11y-container">
+            <span>Accessibility Options:</span>
+            <button class="a11y-btn" onclick="app.toggleHighContrast()">High Contrast</button>
+            <button class="a11y-btn" onclick="app.changeFontSize(0.1)">Text size +</button>
+            <button class="a11y-btn" onclick="app.changeFontSize(-0.1)">Text size -</button>
+            <select class="a11y-btn" onchange="app.changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+        </div>
+    </div>
+
+    <header class="glass">
+        <div class="container">
+            <nav>
+                <a href="#" onclick="app.showScreen('home')" class="logo">
+                    <i class="fas fa-vote-yea"></i> Vote<span>Path</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#" onclick="app.showScreen('home')" class="nav-link active" data-screen="home">Home</a>
+                    <a href="#" onclick="app.showScreen('dashboard')" class="nav-link" data-screen="dashboard">My Dashboard</a>
+                    <a href="#" onclick="app.showScreen('journey')" class="nav-link" data-screen="journey">Journey</a>
+                    <a href="#" onclick="app.showScreen('simulator')" class="nav-link" data-screen="simulator">Simulator</a>
+                    <a href="#" onclick="app.showScreen('resources')" class="nav-link" data-screen="resources">Resources</a>
+                </div>
+                <button class="btn btn-primary" onclick="app.startWizard()">Start Journey</button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Home Screen -->
+        <section id="screen-home" class="screen active container">
+            <div class="hero" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 100px 0; align-items: center;">
+                <div class="hero-content">
+                    <div class="verified-badge">
+                        <img src="assets/verified.png" alt="Check"> Verified Official Guidance
+                    </div>
+                    <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 24px;">Your Personal Path <br>to <span>Civic Impact</span></h1>
+                    <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 40px;">Demystifying the election process with personalized checklists, simulators, and live assistance.</p>
+                    <div class="hero-btns" style="display: flex; gap: 16px;">
+                        <button class="btn btn-primary btn-lg" onclick="app.startWizard()">Start My Voting Guide</button>
+                        <button class="btn btn-outline btn-lg" onclick="app.showScreen('journey')">Explore Process</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/hero.png" alt="VotePath" style="width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow);">
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-dashboard" class="screen container">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">
+                <div class="section-header" style="margin: 0; text-align: left;">
+                    <h2>Your Voting Readiness</h2>
+                    <p>Track your progress and complete pending tasks.</p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+                        <i class="fas fa-clock"></i> Last updated: May 1, 2026
+                    </div>
+                    <select class="a11y-btn" style="background: white; color: var(--primary); border-color: var(--primary); font-weight: 600;">
+                        <option>Jurisdiction: California - Dist 12</option>
+                        <option>Jurisdiction: New York - Dist 5</option>
+                        <option>Jurisdiction: Texas - Dist 2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="widget">
+                    <h3>Personalized Checklist</h3>
+                    <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-muted);">Dynamic tasks based on your profile.</p>
+                    <div id="checklist-container">
+                        <!-- Checklist items -->
+                    </div>
+                    <div style="margin-top: 24px; display: flex; gap: 12px;">
+                        <button class="btn btn-ghost" onclick="app.printChecklist()"><i class="fas fa-print"></i> Print</button>
+                        <button class="btn btn-ghost" onclick="app.showScreen('reminders')"><i class="fas fa-bell"></i> Reminders</button>
+                    </div>
+                </div>
+                <div class="widget readiness-score">
+                    <h3>Readiness Score</h3>
+                    <div class="score-circle" id="readiness-value">0%</div>
+                    <p id="score-status">Start your journey to see your readiness.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey Screen (Expanded) -->
+        <section id="screen-journey" class="screen container">
+            <div class="section-header">
+                <h2>The 12 Stages of Election</h2>
+                <p>Interactive lifecycle from eligibility to result certification.</p>
+            </div>
+            <div class="journey-container glass" style="padding: 40px; border-radius: var(--radius-lg);">
+                <div class="timeline-track" id="journey-stepper">
+                    <!-- Nodes injected -->
+                </div>
+                <div id="journey-content" class="widget" style="margin-top: 40px;">
+                    <h3 id="j-title">Select a stage</h3>
+                    <p id="j-desc">Click a node above to explore that part of the election process.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simulator Screen -->
+        <section id="screen-simulator" class="screen container">
+            <div class="section-header">
+                <h2>Advanced Ballot Simulator</h2>
+                <p>Practice marking a ballot and understanding referendum text without pressure.</p>
+            </div>
+            <div class="simulator-layout widget" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div class="ballot-paper" style="border: 2px solid #ccc; padding: 30px; background: #fff;">
+                    <h4 style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">OFFICIAL BALLOT</h4>
+                    <div id="ballot-items">
+                        <!-- Ballot options -->
+                    </div>
+                </div>
+                <div class="simulator-guidance">
+                    <h3>Simulator Mode: Active</h3>
+                    <p id="sim-guide">Click on candidates to select them. We'll warn you if you over-vote or miss a section.</p>
+                    <div id="sim-alerts" style="margin-top: 20px;"></div>
+                    <button class="btn btn-primary" style="margin-top: 30px; width: 100%;" onclick="app.submitSim()">Cast Practice Vote</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Screen -->
+        <section id="screen-resources" class="screen container">
+            <div class="section-header">
+                <h2>Resource Center</h2>
+                <p>Official links, polling locators, and civic education materials.</p>
+            </div>
+            <div class="content-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+                <div class="widget">
+                    <h3>Polling Place Locator</h3>
+                    <img src="assets/map.png" alt="Map" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin: 16px 0;">
+                    <p>Find your assigned voting location based on your address.</p>
+                    <button class="btn btn-outline" style="margin-top: 12px; width: 100%;">Search Database</button>
+                </div>
+                <div class="widget">
+                    <h3>Voter ID Guide</h3>
+                    <p>State-by-state requirements for identification at the polls.</p>
+                    <a href="#" class="btn btn-ghost">View All States <i class="fas fa-external-link-alt"></i></a>
+                </div>
+                <div class="widget">
+                    <h3>Election Glossary</h3>
+                    <p>Plain-language definitions of common terms like 'provisional', 'canvass', and 'precinct'.</p>
+                    <button class="btn btn-outline" style="margin-top: 12px; width: 100%;">Open Glossary</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Chat Assistant -->
+    <div class="chat-widget">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <span>VotePath Assistant</span>
+                <i class="fas fa-times" onclick="app.toggleChat()" style="cursor: pointer;"></i>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message msg-bot">Hello! I'm your election assistant. Ask me anything about registration, voting methods, or deadlines!</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Type a question...">
+                <button class="btn btn-primary" onclick="app.sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <div class="chat-btn" onclick="app.toggleChat()">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+    </div>
+
+    <!-- Wizard Modal -->
+    <div id="wizard-modal" class="modal">
+        <div class="modal-content glass">
+            <span class="close-btn" onclick="app.closeWizard()">&times;</span>
+            <div id="wizard-body">
+                <!-- Wizard content -->
+            </div>
+        </div>
+    </div>
+
+    <footer style="padding: 100px 0; border-top: 1px solid var(--border); margin-top: 60px;">
+        <div class="container" style="text-align: center;">
+            <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+                <i class="fas fa-vote-yea"></i> Vote<span>Path</span>
+            </div>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 30px;">VotePath is a nonpartisan educational platform. We do not represent any government agency. Always verify information with your local election office.</p>
+            <div class="footer-links" style="display: flex; justify-content: center; gap: 32px; font-weight: 500;">
+                <a href="#" style="text-decoration: none; color: var(--text-main);">Terms</a>
+                <a href="#" style="text-decoration: none; color: var(--text-main);">Privacy</a>
+                <a href="#" style="text-decoration: none; color: var(--text-main);">Accessibility</a>
+                <a href="#" style="text-decoration: none; color: var(--text-main);">Official Sources</a>
+            </div>
+            <div style="margin-top: 40px; color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 VotePath Project. Updated May 1, 2026.</div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
